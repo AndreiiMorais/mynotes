@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
@@ -35,6 +36,12 @@ class HomePage extends StatelessWidget {
           switch (snapshot.connectionState) {
             //esse switch eh para apresentar um loading caso demore para iniciar o firebase
             case ConnectionState.done:
+              final user = FirebaseAuth.instance.currentUser;
+              if (user?.emailVerified ?? false) {
+                print('you are verified');
+              } else {
+                print('you need to verify your email first');
+              }
               return const Text('Done');
             default:
               return const Text('Loading...');
