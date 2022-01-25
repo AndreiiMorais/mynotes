@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/register_view.dart';
+import 'package:mynotes/views/verify_email.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,22 +38,18 @@ class HomePage extends StatelessWidget {
         switch (snapshot.connectionState) {
           //esse switch eh para apresentar um loading caso demore para iniciar o firebase
           case ConnectionState.done:
-            // final user = FirebaseAuth.instance.currentUser;
-            // print(user);
-            // if (user?.emailVerified ?? false) {
-            // } else {
-            //   //nao é boa ideia usar push dentro de um futureBuilder, concertaremos.
-            //   // Navigator.of(context).push(
-            //   //   MaterialPageRoute(
-            //   //     builder: (context) => const VerifyEmailView(),
-            //   //   ),
-            //   // );
-            //   return const VerifyEmailView();
-            //   //ao inves de retornar a rota, retornamos apenas o conteudo da pagina
-            // }
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null) {
+              if (user.emailVerified) {
+                print('email is verified');
+              } else {
+                return const VerifyEmailView();
+              }
+            } else {
+              return const LoginView();
+            }
+            return const Text('Done');
 
-            // return const Text('Done');
-            return const LoginView();
           default:
             return const CircularProgressIndicator();
         }
@@ -59,4 +57,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
