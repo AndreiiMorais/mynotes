@@ -36,18 +36,52 @@ class HomePage extends StatelessWidget {
           switch (snapshot.connectionState) {
             //esse switch eh para apresentar um loading caso demore para iniciar o firebase
             case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
-              if (user?.emailVerified ?? false) {
-                print('you are verified');
-              } else {
-                print('you need to verify your email first');
-              }
-              return const Text('Done');
+              // final user = FirebaseAuth.instance.currentUser;
+              // print(user);
+              // if (user?.emailVerified ?? false) {
+              // } else {
+              //   //nao é boa ideia usar push dentro de um futureBuilder, concertaremos.
+              //   // Navigator.of(context).push(
+              //   //   MaterialPageRoute(
+              //   //     builder: (context) => const VerifyEmailView(),
+              //   //   ),
+              //   // );
+              //   return const VerifyEmailView();
+              //   //ao inves de retornar a rota, retornamos apenas o conteudo da pagina
+              // }
+
+              // return const Text('Done');
+              return const LoginView();
             default:
               return const Text('Loading...');
           }
         },
       ),
+    );
+  }
+}
+
+class VerifyEmailView extends StatefulWidget {
+  const VerifyEmailView({Key? key}) : super(key: key);
+
+  @override
+  _VerifyEmailViewState createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text('Please Verify your email address:'),
+        TextButton(
+          onPressed: () async {
+            final user = FirebaseAuth.instance.currentUser;
+            await user?.sendEmailVerification();
+          },
+          child: const Text('Send email Verification'),
+        ),
+      ],
     );
   }
 }
