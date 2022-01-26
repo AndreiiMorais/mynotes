@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -58,21 +59,26 @@ class _HomePageState extends State<LoginView> {
               final password = _password.text;
 
               try {
-                final userCredential = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: email, password: password);
-                print(userCredential);
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: email,
+                  password: password,
+                );
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/notes/',
+                  (route) => false,
+                );
               } on FirebaseAuthException catch (e) {
-                print(e.code); //somente para ver o codigo do exeption
+                devtools.log(e.code); //somente para ver o codigo do exeption
                 if (e.code == 'user-not-found') {
-                  print('Usuário não encontrado!');
+                  devtools.log('Usuário não encontrado!');
                 } else if (e.code == 'wrong=password') {
-                  print('Senha incorreta');
+                  devtools.log('Senha Incorreta');
                 }
               } catch (e) {
-                print('Something bad Happened');
-                print(e.runtimeType); //para ver o tipo do exeption
-                print(e);
+                devtools.log('Something bad Happend');
+                devtools.log(
+                    e.runtimeType.toString()); //para ver o tipo do exeption
+                devtools.log(e.toString());
               }
             },
             child: const Text('Login'),
@@ -84,7 +90,7 @@ class _HomePageState extends State<LoginView> {
                 (route) => false,
               );
             },
-            child: Text('Not registered yet? Register here!'),
+            child: const Text('Not registered yet? Register here!'),
           ),
         ],
       ),
