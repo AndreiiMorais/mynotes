@@ -7,6 +7,7 @@ class AuthService implements AuthProvider {
   const AuthService(this.provider);
 
   factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
+  //esse factory serve para chamar o authservice de qualquer lugar sem precisar instanciar ele o tempo todo.
 
   @override
   Future<AuthUser> createUser({
@@ -37,4 +38,7 @@ class AuthService implements AuthProvider {
 
   @override
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
+
+  @override
+  Future<void> initialize() => provider.initialize();
 }
