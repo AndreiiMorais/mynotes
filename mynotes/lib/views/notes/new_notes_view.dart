@@ -92,6 +92,7 @@ class _NewNotesViewState extends State<NewNotesView> {
               _setupTextControllerListener();
 
               return TextField(
+                autofocus: true,
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
