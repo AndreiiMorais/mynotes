@@ -4,6 +4,7 @@ import 'package:mynotes/services/auth/auth_user.dart';
 import 'package:test/test.dart';
 
 void main() {
+  //para rodar os testes no terminal: flutter test "diretorio"(exemplo: flutter teste test/auth_test.dat)
   group('Mock Authentication', () {
     final provider = MockAuthProvider();
     test('should not be initializedto begin with', () {
