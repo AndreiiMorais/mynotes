@@ -102,7 +102,9 @@ class _NewNotesViewState extends State<NewNotesView> {
                 ),
               );
             default:
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
           }
         },
       ),

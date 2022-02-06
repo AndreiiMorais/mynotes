@@ -88,12 +88,16 @@ class _NotesViewState extends State<NotesView> {
                         return const Text('No Notes to Display');
                       }
                     default:
-                      return const CircularProgressIndicator();
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                   }
                 },
               );
             default:
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
           }
         },
       ),
