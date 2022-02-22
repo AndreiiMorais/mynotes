@@ -35,7 +35,7 @@ class _NotesViewState extends State<NotesView> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(newNoteRoute);
+              Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
             },
           ),
           PopupMenuButton<MenuAction>(
@@ -72,6 +72,7 @@ class _NotesViewState extends State<NotesView> {
               return StreamBuilder(
                 stream: _notesService.allNotes,
                 builder: (context, snapshot) {
+                  devtools.log(snapshot.data.toString());
                   switch (snapshot.connectionState) {
                     case ConnectionState
                         .waiting: //fall through, ou seja, vai cair pro proximo
@@ -82,6 +83,12 @@ class _NotesViewState extends State<NotesView> {
                           notes: allNotes,
                           onDeleteNote: (DataBaseNote note) async {
                             await _notesService.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(
+                              createOrUpdateNoteRoute,
+                              arguments: note,
+                            );
                           },
                         );
                       } else {
