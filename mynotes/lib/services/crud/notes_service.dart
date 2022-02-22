@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:mynotes/extensions/list/filter.dart';
 import 'package:mynotes/services/crud/crud_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' show join;
@@ -10,6 +11,8 @@ class NotesService {
   Database? _db;
 
   List<DataBaseNote> _notes = []; //cache local
+
+  DatabaseUser? _user;
 
   //inicio do singleton
   static final NotesService _shared = NotesService._sharedInstance();
@@ -24,14 +27,31 @@ class NotesService {
   //final do singleton
 
   late final StreamController<List<DataBaseNote>> _notesStreamController;
-  Stream<List<DataBaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DataBaseNote>> get allNotes =>
+      _notesStreamController.stream.filter((note) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return note.userId == currentUser.id; //assim retornamos um bool
+        } else {
+          throw UserShouldBeSetBeforeReadingNotes();
+        }
+      });
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     try {
       final user = await getUser(email: email);
+      if (setAsCurrentUser) {
+        _user = user;
+      }
       return user;
     } on UserDoNotExist {
       final createdUser = await createUser(email: email);
+      if (setAsCurrentUser) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (e) {
       rethrow; //nao é a forma correta, mas é um jeito facil de colocar um break point e fazer um debug
@@ -244,10 +264,14 @@ class NotesService {
     await getNote(id: note.id);
 
     //update db
-    final updatesCount = await db.update(noteTable, {
-      textColumn: text,
-      isSyncWithCloudColumn: 0,
-    });
+    final updatesCount = await db.update(
+        noteTable,
+        {
+          textColumn: text,
+          isSyncWithCloudColumn: 0,
+        },
+        where: 'id = ?',
+        whereArgs: [note.id]);
 
     if (updatesCount == 0) {
       //se for 0 significa que nao atualizou nenhuma note
