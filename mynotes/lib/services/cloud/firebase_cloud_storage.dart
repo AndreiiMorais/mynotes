@@ -43,6 +43,7 @@ class FirebaseCloudStorage {
             (value) => value.docs.map(
               (doc) {
                 //essa parte faz o mesmo que CloudNote.fromSnapshot(doc)
+                //eu deixei assim para ficar de exemplo, mas poderia alterar essa parte por CloudNote.fromSnapshot(doc)
                 return CloudNote(
                   documentId: doc.id,
                   ownerUserId: doc.data()[ownerUserIdFieldName] as String,
@@ -56,11 +57,15 @@ class FirebaseCloudStorage {
     }
   }
 
-  void createNewNote({required String ownerUserId}) async {
-    await notes.add({
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+    final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
       textFieldName: '',
     });
+    //precisa fazer o get no document, pois ele é apenas uma reference
+    final fetchedNote = await document.get();
+    return CloudNote(
+        documentId: fetchedNote.id, ownerUserId: ownerUserId, text: '');
   }
 
   //inicio do singleton

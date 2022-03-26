@@ -4,7 +4,8 @@ import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/enums/menu_action.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/services/crud/notes_service.dart';
+import 'package:mynotes/services/cloud/cloud_note.dart';
+import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:mynotes/utilities/dialogs/logou_dialog.dart';
 import 'package:mynotes/views/notes/notes_listview.dart';
 
@@ -16,13 +17,13 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  late final NotesService _notesService;
-  String get userEmail => AuthService.firebase().currentUser!.email;
-  //nesse ponto estamos expondo o userEmail, que aqui com certeza tem um email
+  late final FirebaseCloudStorage _notesService;
+  String get userId => AuthService.firebase().currentUser!.id;
+  //nesse ponto estamos expondo o userEmail, que aqui com certeza tem um id
 
   @override
   void initState() {
-    _notesService = NotesService();
+    _notesService = FirebaseCloudStorage();
     super.initState();
   }
 
@@ -64,43 +65,31 @@ class _NotesViewState extends State<NotesView> {
           )
         ],
       ),
-      body: FutureBuilder(
-        future: _notesService.getOrCreateUser(email: userEmail),
+      body: StreamBuilder(
+        stream: _notesService.allNotes(ownerUserId: userId),
         builder: (context, snapshot) {
+          devtools.log(snapshot.data.toString());
           switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return StreamBuilder(
-                stream: _notesService.allNotes,
-                builder: (context, snapshot) {
-                  devtools.log(snapshot.data.toString());
-                  switch (snapshot.connectionState) {
-                    case ConnectionState
-                        .waiting: //fall through, ou seja, vai cair pro proximo
-                    case ConnectionState.active:
-                      if (snapshot.hasData) {
-                        final allNotes = snapshot.data as List<DataBaseNote>;
-                        return NotesListView(
-                          notes: allNotes,
-                          onDeleteNote: (DataBaseNote note) async {
-                            await _notesService.deleteNote(id: note.id);
-                          },
-                          onTap: (note) {
-                            Navigator.of(context).pushNamed(
-                              createOrUpdateNoteRoute,
-                              arguments: note,
-                            );
-                          },
-                        );
-                      } else {
-                        return const Text('No Notes to Display');
-                      }
-                    default:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                  }
-                },
-              );
+            case ConnectionState
+                .waiting: //fall through, ou seja, vai cair pro proximo
+            case ConnectionState.active:
+              if (snapshot.hasData) {
+                final allNotes = snapshot.data as Iterable<CloudNote>;
+                return NotesListView(
+                  notes: allNotes,
+                  onDeleteNote: (CloudNote note) async {
+                    await _notesService.deleteNote(documentId: note.documentId);
+                  },
+                  onTap: (note) {
+                    Navigator.of(context).pushNamed(
+                      createOrUpdateNoteRoute,
+                      arguments: note,
+                    );
+                  },
+                );
+              } else {
+                return const Text('No Notes to Display');
+              }
             default:
               return const Center(
                 child: CircularProgressIndicator(),
