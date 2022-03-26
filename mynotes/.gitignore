@@ -1,3 +1,7 @@
+.vscode/*
+.fvm/flutter_sdk
+mynotes/.fvm/flutter_sdk
+
 # Miscellaneous
 *.class
 *.log
@@ -18,8 +22,6 @@
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-.vscode/*
-# mynotes/.fvm/flutter_sdk
 
 # Flutter/Dart/Pub related
 **/doc/api/
