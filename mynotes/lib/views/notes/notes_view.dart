@@ -1,5 +1,3 @@
-import 'dart:developer' as devtools show log;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/constants/routes.dart';
@@ -44,8 +42,6 @@ class _NotesViewState extends State<NotesView> {
           ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
-              devtools.log(value
-                  .toString()); //a funçao log funciona como um "print", mas de forma mais correta
               switch (value) {
                 case MenuAction.logout:
                   final shouldLogout = await showLogoutDialog(context);
@@ -71,7 +67,6 @@ class _NotesViewState extends State<NotesView> {
       body: StreamBuilder(
         stream: _notesService.allNotes(ownerUserId: userId),
         builder: (context, snapshot) {
-          devtools.log(snapshot.data.toString());
           switch (snapshot.connectionState) {
             case ConnectionState
                 .waiting: //fall through, ou seja, vai cair pro proximo
