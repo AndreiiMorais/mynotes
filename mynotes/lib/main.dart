@@ -11,6 +11,8 @@ import 'package:mynotes/views/notes/create_update_notes_view.dart';
 import 'package:mynotes/views/notes/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
 import 'package:mynotes/views/verify_email.dart';
+
+import 'views/forgot_password_view.dart';
 //'dart:developer sao ferramentas para devs, o alias devtools serve apenas como apelido, e aqui estamos restringindo apenas a função log.
 
 void main() {
@@ -60,6 +62,8 @@ class HomePage extends StatelessWidget {
           return const LoginView();
         } else if (state is AuthStateRegistering) {
           return const RegisterView();
+        } else if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordView();
         } else {
           return const Scaffold(
             body: Center(
