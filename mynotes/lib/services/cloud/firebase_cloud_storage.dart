@@ -26,35 +26,12 @@ class FirebaseCloudStorage {
     }
   }
 
-  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) =>
-      notes.snapshots().map((event) => event.docs
-          .map((doc) => CloudNote.fromSnapshot(doc))
-          .where((note) => note.ownerUserId == ownerUserId));
-
-  Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
-    try {
-      return await notes
-          .where(
-            ownerUserIdFieldName,
-            isEqualTo: ownerUserId,
-          )
-          .get()
-          .then(
-            (value) => value.docs.map(
-              (doc) {
-                //essa parte faz o mesmo que CloudNote.fromSnapshot(doc)
-                //eu deixei assim para ficar de exemplo, mas poderia alterar essa parte por CloudNote.fromSnapshot(doc)
-                return CloudNote(
-                  documentId: doc.id,
-                  ownerUserId: doc.data()[ownerUserIdFieldName] as String,
-                  text: doc.data()[textFieldName] as String,
-                );
-              },
-            ),
-          );
-    } catch (e) {
-      throw CouldNotGetAllNotesException();
-    }
+  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
+    final allNotes = notes
+        .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .snapshots()
+        .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
+    return allNotes;
   }
 
   Future<CloudNote> createNewNote({required String ownerUserId}) async {
