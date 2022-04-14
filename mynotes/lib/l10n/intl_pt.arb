@@ -1,3 +1,62 @@
 {
+    "logout_button": "Sair",
+    "note": "Notas",
+    "cancel": "Cancelar",
+    "yes": "Sim",
+    "delete": "Deletar",
+    "sharing": "Compartilhando",
+    "ok": "OK",
+    "login": "Entrar",
+    "verify_email": "Verificar email",
+    "register": "Cadastrar",
+    "restart": "Reiniciar",
+
+    "start_typing_your_note": "Começe a digitar sua anotação",
+    "delete_note_prompt": "Você tem certeza que deseja deletar essa anotação?",
+    "cannot_share_empty_note_prompt": "Impossivel compartilhar uma nota vazia!",
+    "generic_error_prompt": "Erro Inesperado",
+    "logout_dialog_prompt": "Você tem certeza que deseja sair?",
+
+    "password_reset": "Resetar senha",
+    "password_reset_dialog_prompt": "Nos enviamos um link de recuperação. Por favor verifique o seu email.",
+
+    "login_error_cannot_find_user": "Usuário ou senha incorretos",
+    "login_error_wrong_credentials": "Usuário ou senha incorretos",
+    "login_error_auth_error": "Erro de autenticação",
+
+    "login_view_prompt": "Por favor entre com sua conta para poder interagir com suas anotações",
     
+    "login_view_forgot_password": "Esqueci minha senha",
+    "login_view_not_registered_yet": "Ainda não está registrado? Cadastre-se aqui",
+
+    "email_text_field_placeholder": "Digite seu email",
+    "password_text_field_placeholder": "Digite sua senha",
+    
+    "forgot_password": "Esqueci minha senha",
+    "forgot_password_view_generic_error": "Não conseguimos processar sua solicitação, por favor verifique se você possui uma conta, ou cadastre uma voltando um passo!",
+    "forgot_password_view_prompt": "Se você esqueceu sua senha, digite seu email e nós enviaremos um link de recuperação",
+    "forgot_password_view_send_me_link": "Enviar link de recuperação",
+    "forgot_password_view_back_to_login": "Voltar",
+
+    "register_error_weak_password": "Senha muito fraca, por favor selecione outra!",
+    "register_error_email_already_in_use": "Já existe um usuário cadastrado com esse email, por favor escolha outro, ou recupere sua senha",
+    "register_error_generic": "Falha ao registrar, tente novamente mais tarde!",
+    "register_error_invalid_email": "O email digitado parece ser inválido, por favor digite um email válido",
+    "register_view_prompt": "Crie uma conta para poder gerenciar suas anotações",
+    "register_view_already_registered": "Já esta cadastrado? Fazer login!",
+
+    "verify_email_view_prompt": "Nós enviamos um email de verificação para o email cadastrado, por favor cheque seu email. Se não recebeu, clique no botão abaixo",
+    "verify_email_send_email_verification": "Enviar email de verificação",
+
+    "notes_title": "{count, plural, =0{Sem Anotações} =1{1 Anotação} other{{count} Anotações}}",
+    "loading_dialog_login": "Por favor aguarde enquanto conectamos você",
+    "loading_dialog_text": "Por favor Aguarde",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notes"
+            }
+        }
+    }
 }
