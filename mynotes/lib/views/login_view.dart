@@ -63,6 +63,7 @@ class _HomePageState extends State<LoginView> {
               children: [
                 Text(context.loc.login_view_prompt),
                 TextField(
+                  key: const Key('emailTextField'),
                   controller: _email,
                   enableSuggestions: true,
                   autocorrect: false,
@@ -72,6 +73,7 @@ class _HomePageState extends State<LoginView> {
                   ),
                 ),
                 TextField(
+                  key: const Key('passwordTextField'),
                   controller: _password,
                   obscureText: true,
                   enableSuggestions: false,
@@ -81,6 +83,7 @@ class _HomePageState extends State<LoginView> {
                   ),
                 ),
                 TextButton(
+                  key: const Key('loginButton'),
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;

@@ -58,6 +58,7 @@ class _NotesViewState extends State<NotesView> {
             },
           ),
           PopupMenuButton<MenuAction>(
+            key: const Key('menu_button'),
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
@@ -73,6 +74,7 @@ class _NotesViewState extends State<NotesView> {
             itemBuilder: (context) {
               return [
                 PopupMenuItem<MenuAction>(
+                  key: const Key('logout_button'),
                   value: MenuAction.logout,
                   child: Text(context.loc.logout_button),
                 ),

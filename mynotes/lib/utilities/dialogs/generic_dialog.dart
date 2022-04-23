@@ -18,6 +18,7 @@ Future<T?> showGenericDialog<T>({
         actions: options.keys.map((optionTitle) {
           final value = options[optionTitle];
           return TextButton(
+            key: Key(optionTitle),
             onPressed: () {
               if (value != null) {
                 Navigator.of(context).pop(value);
