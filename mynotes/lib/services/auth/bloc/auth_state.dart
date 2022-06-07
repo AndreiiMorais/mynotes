@@ -32,6 +32,19 @@ class AuthStateLoggedIn extends AuthState {
     required this.user,
     required bool isLoading,
   }) : super(isLoading: isLoading);
+
+  @override
+  bool operator ==(other) {
+    if (other is! AuthStateLoggedIn) {
+      return false;
+    }
+
+    if (user != other.user) {
+      return false;
+    }
+
+    return true;
+  }
 }
 
 class AuthStateForgotPassword extends AuthState {

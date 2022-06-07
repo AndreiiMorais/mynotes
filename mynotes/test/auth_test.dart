@@ -1,7 +1,14 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/auth_provider.dart';
 import 'package:mynotes/services/auth/auth_user.dart';
+import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
+import 'package:mynotes/services/auth/bloc/auth_state.dart';
 import 'package:test/test.dart';
+
+class MockAuthUser extends Mock implements AuthUser {}
 
 void main() {
   //para rodar os testes no terminal: flutter test "diretorio"(exemplo: flutter teste test/auth_test.dat)
@@ -80,12 +87,48 @@ void main() {
       final user = provider.currentUser;
       expect(user, isNotNull);
     });
+
+    final bloc = AuthBloc(provider);
+    const user = AuthUser(
+      id: 'My_id',
+      isEmailVerified: true,
+      email: 'teste@teste.com',
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'bloc test',
+      setUp: () async {
+        await provider.initialize();
+        // when<Future<AuthUser>>(() =>
+        //         provider.logIn(email: 'teste@teste.com', password: '12345'))
+        //     .thenAnswer((realInvocation) => Future.value(user));
+      },
+      build: () {
+        return bloc;
+      },
+      act: (bloc) => [
+        bloc.add(const AuthEventInitialize()),
+        bloc.add(const AuthEventLogIn('teste@teste.com', '123456')),
+      ],
+      expect: () => [
+        const AuthStateLoggedOut(
+          exception: null,
+          isLoading: true,
+          loadingText: 'Please wait while i log you in',
+        ),
+        const AuthStateLoggedOut(
+          exception: null,
+          isLoading: false,
+        ),
+        const AuthStateLoggedIn(user: user, isLoading: false)
+      ],
+    );
   });
 }
 
 class NoteInitializedException implements Exception {}
 
-class MockAuthProvider implements AuthProvider {
+class MockAuthProvider extends Mock implements AuthProvider {
   //esse mock serve para 'simular' a funçao do firebase
   AuthUser? _user;
   var _isInitialized = false;
@@ -125,8 +168,8 @@ class MockAuthProvider implements AuthProvider {
     if (password == 'foobar') throw WrongPasswordAuthException();
     const user = AuthUser(
       id: 'My_id',
-      isEmailVerified: false,
-      email: 'foo@bar.com',
+      isEmailVerified: true,
+      email: 'teste@teste.com',
     );
     _user = user;
     return Future.value(user);
